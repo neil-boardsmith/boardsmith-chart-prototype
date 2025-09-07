@@ -1,0 +1,13 @@
+<svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="18.5" y="6.5" width="4" height="7" transform="rotate(90 18.5 6.5)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="11.5" y="6.5" width="4" height="5" transform="rotate(90 11.5 6.5)" fill="#0E9384" stroke="#181D27"/>
+<rect x="21.5" y="6.5" width="4" height="3" transform="rotate(90 21.5 6.5)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="18.5" y="13.5" width="4" height="3" transform="rotate(90 18.5 13.5)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="24.5" y="20.5" width="4" height="7" transform="rotate(90 24.5 20.5)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="17.5" y="20.5" width="4" height="6" transform="rotate(90 17.5 20.5)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="15.5" y="13.5" width="4" height="5" transform="rotate(90 15.5 13.5)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="10.5" y="13.5" width="4" height="4" transform="rotate(90 10.5 13.5)" fill="#0E9384" stroke="#181D27"/>
+<rect x="11.5" y="20.5" width="4" height="5" transform="rotate(90 11.5 20.5)" fill="#0E9384" stroke="#181D27"/>
+<line x1="6.5" y1="5" x2="6.5" y2="26" stroke="#181D27"/>
+<path d="M20.1231 9.00001L23 15.5L14 22.5" stroke="#F04438" stroke-linecap="round"/>
+</svg>

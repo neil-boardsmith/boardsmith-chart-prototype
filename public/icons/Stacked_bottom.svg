@@ -1,0 +1,13 @@
+<svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="6.5" y="13.5" width="4" height="7" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="5" transform="matrix(1 0 0 -1 7 11)" fill="#0E9384" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="7" transform="matrix(1 0 0 -1 7 18)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="3" transform="matrix(1 0 0 -1 7 21)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="3" transform="matrix(1 0 0 -1 14 18)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="7" transform="matrix(1 0 0 -1 21 24)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="6" transform="matrix(1 0 0 -1 21 17)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="5" transform="matrix(1 0 0 -1 14 15)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="4" transform="matrix(1 0 0 -1 14 10)" fill="#0E9384" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="5" transform="matrix(1 0 0 -1 21 11)" fill="#0E9384" stroke="#181D27"/>
+<line y1="-0.5" x2="21" y2="-0.5" transform="matrix(1 0 0 -1 5 5)" stroke="#181D27"/>
+</svg>

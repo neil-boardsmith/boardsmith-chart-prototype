@@ -1,0 +1,13 @@
+<svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="-0.5" y="0.5" width="4" height="7" transform="matrix(1 0 0 -1 7 18.9082)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="5" transform="matrix(1 0 0 -1 7 11.9082)" fill="#0E9384" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="3" transform="matrix(1 0 0 -1 7 21.9082)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="3" transform="matrix(1 0 0 -1 14 18.9082)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="7" transform="matrix(1 0 0 -1 21 24.9082)" fill="#F0FDF9" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="6" transform="matrix(1 0 0 -1 21 17.9082)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="5" transform="matrix(1 0 0 -1 14 15.9082)" fill="#CCFBEF" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="4" transform="matrix(1 0 0 -1 14 10.9082)" fill="#0E9384" stroke="#181D27"/>
+<rect x="-0.5" y="0.5" width="4" height="5" transform="matrix(1 0 0 -1 21 11.9082)" fill="#0E9384" stroke="#181D27"/>
+<line y1="-0.5" x2="21" y2="-0.5" transform="matrix(1 0 0 -1 5 5.90817)" stroke="#181D27"/>
+<path d="M9.00001 20.0312L15.5 22.9082L22.5 13.9082" stroke="#F04438" stroke-linecap="round"/>
+</svg>
