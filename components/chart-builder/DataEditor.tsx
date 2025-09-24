@@ -47,7 +47,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
 
   // Create extra empty rows for expansion
   const extraRows = isExpanded ? 5 : 3; // More extra rows in expanded view
-  const emptyRows = Array.from({ length: extraRows }, () => ({}));
+  const emptyRows: ChartData[] = Array.from({ length: extraRows }, () => ({ category: '' } as ChartData));
   const displayData = [...data, ...emptyRows];
 
   // Detect current data orientation
