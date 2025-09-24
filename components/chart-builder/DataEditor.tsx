@@ -374,7 +374,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
       newData.push(newRow);
     });
     
-    onChange(newData);
+    onChange(newData.map(toChartData));
   };
 
   return (
