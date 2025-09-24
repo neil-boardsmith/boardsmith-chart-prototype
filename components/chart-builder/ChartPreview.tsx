@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { ChartConfig } from '@/types/chart-types';
 import { getApexConfig } from '@/lib/chart-config/simple-apex-config';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Database, Trash2 } from 'lucide-react';
 
 // Dynamically import ApexCharts to avoid SSR issues
 const Chart = dynamic(() => import('react-apexcharts'), { 
@@ -21,24 +21,14 @@ const Chart = dynamic(() => import('react-apexcharts'), {
 
 interface ChartPreviewProps {
   config: ChartConfig;
+  onOpenDataEditor?: () => void;
+  onDelete?: () => void;
 }
 
-export const ChartPreview: React.FC<ChartPreviewProps> = ({ config }) => {
+export const ChartPreview: React.FC<ChartPreviewProps> = ({ config, onOpenDataEditor, onDelete }) => {
   const chartOptions = useMemo(() => {
     try {
-      // Use simple direct configuration for our chart types
-      const chartId = config.subtype === 'stacked100' && config.type === 'area' ? 'area100' :
-                      config.subtype === 'stacked100' ? 'stacked100' : 
-                      config.subtype === 'stacked' ? 'stacked' :
-                      config.subtype === 'grouped' ? 'clustered' :
-                      config.type === 'waterfall' ? 'waterfall' :
-                      config.type === 'combo' ? 'combination' :
-                      config.type === 'line' ? 'line' :
-                      config.type === 'area' ? 'area' : 'clustered';
-      
-      const orientation = config.orientation || 'top';
-      
-      return getApexConfig(chartId, orientation, config.data);
+      return getApexConfig(config);
     } catch (error) {
       console.error('Error generating chart options:', error);
       return null;
@@ -84,12 +74,41 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ config }) => {
         </div>
       )}
 
-      {/* Chart Type Badge */}
-      <div className="absolute top-4 right-4">
-        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800">
-          {config.type.charAt(0).toUpperCase() + config.type.slice(1)}
-          {config.subtype && config.subtype !== 'standard' && ` - ${config.subtype}`}
-        </span>
+      {/* Source Text */}
+      {config.source && (
+        <div className="absolute bottom-2 left-2">
+          <span className="text-xs text-gray-500 bg-white/90 px-2 py-1 rounded">
+            {config.source}
+          </span>
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      <div className="absolute bottom-2 right-2 flex gap-1">
+        {onOpenDataEditor && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenDataEditor();
+            }}
+            className="p-1.5 bg-white/90 hover:bg-white border border-gray-300 rounded-md shadow-sm transition-all hover:shadow-md"
+            title="Edit Data"
+          >
+            <Database className="w-3 h-3 text-gray-600" />
+          </button>
+        )}
+        {onDelete && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="p-1.5 bg-white/90 hover:bg-red-50 border border-gray-300 rounded-md shadow-sm transition-all hover:shadow-md hover:border-red-300"
+            title="Delete Chart"
+          >
+            <Trash2 className="w-3 h-3 text-gray-600 hover:text-red-600" />
+          </button>
+        )}
       </div>
     </div>
   );

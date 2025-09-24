@@ -37,6 +37,15 @@ export interface ChartConfig {
   legendPosition: 'top' | 'bottom' | 'right' | 'left';
   showDataLabels: boolean;
   
+  // New Customization Options
+  subtitle?: string;
+  source?: string;
+  showStackTotals?: boolean;
+  showXAxisLabels?: boolean;
+  showYAxisLabels?: boolean;
+  xAxisTitle?: string;
+  yAxisTitle?: string;
+  
   // System Managed (Intelligent Defaults)
   axes: AutoAxisConfig;
   formatting: AutoFormattingConfig;

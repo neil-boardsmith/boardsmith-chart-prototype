@@ -21,13 +21,12 @@ interface ChartInstance {
   data: any[];
   position: { x: number; y: number };
   size: { width: number; height: number };
+  showDataEditor?: boolean;
 }
 
 export const ChartWorkspace: React.FC = () => {
   const [charts, setCharts] = useState<ChartInstance[]>([]);
   const [selectedChartId, setSelectedChartId] = useState<string | null>(null);
-  const [showDataEditor, setShowDataEditor] = useState(false);
-  const [editingChartId, setEditingChartId] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleAddChart = useCallback((
@@ -174,6 +173,14 @@ export const ChartWorkspace: React.FC = () => {
         showLegend: true,
         legendPosition: actualOrientation === 'top' ? 'top' : 'bottom',
         showDataLabels: false,
+        // New customization options with defaults
+        subtitle: '',
+        source: '',
+        showStackTotals: false,
+        showXAxisLabels: true,
+        showYAxisLabels: true,
+        xAxisTitle: '',
+        yAxisTitle: '',
         axes: {
           xAxis: { range: 'auto', format: 'auto-detect', ticks: 'optimal' },
           yAxis: { range: 'auto-padded', format: 'smart-currency-percentage', ticks: 'readable-intervals' }
@@ -194,16 +201,15 @@ export const ChartWorkspace: React.FC = () => {
       },
       data: sampleData,
       position: { 
-        x: 50 + (charts.length * 50), 
-        y: 50 + (charts.length * 30) 
+        x: window.innerWidth / 2 - 300, // Center horizontally (600px width / 2)
+        y: window.innerHeight / 2 - 200 - 32 // Center vertically (400px height / 2, accounting for header)
       },
       size: { width: 600, height: 400 }
     };
 
-    setCharts([...charts, newChart]);
+    const chartWithEditor = { ...newChart, showDataEditor: true };
+    setCharts([...charts, chartWithEditor]);
     setSelectedChartId(id);
-    setEditingChartId(id);
-    setShowDataEditor(true);
   }, [charts]);
 
   const handleDataChange = useCallback((chartId: string, newData: any[]) => {
@@ -220,13 +226,51 @@ export const ChartWorkspace: React.FC = () => {
     );
   }, []);
 
+  const handleConfigChange = useCallback((chartId: string, newConfig: ChartConfig) => {
+    setCharts(prevCharts => 
+      prevCharts.map(chart => 
+        chart.id === chartId 
+          ? { 
+              ...chart, 
+              config: newConfig,
+              data: newConfig.data
+            }
+          : chart
+      )
+    );
+  }, []);
+
   const handleChartClick = (chartId: string) => {
     setSelectedChartId(chartId);
-    setEditingChartId(chartId);
-    setShowDataEditor(true);
   };
 
-  const selectedChart = charts.find(c => c.id === editingChartId);
+  const toggleDataEditor = (chartId: string) => {
+    setCharts(prevCharts => 
+      prevCharts.map(chart => 
+        chart.id === chartId 
+          ? { ...chart, showDataEditor: !chart.showDataEditor }
+          : chart
+      )
+    );
+  };
+
+  const closeDataEditor = (chartId: string) => {
+    setCharts(prevCharts => 
+      prevCharts.map(chart => 
+        chart.id === chartId 
+          ? { ...chart, showDataEditor: false }
+          : chart
+      )
+    );
+  };
+
+  const deleteChart = useCallback((chartId: string) => {
+    setCharts(prevCharts => prevCharts.filter(chart => chart.id !== chartId));
+    if (selectedChartId === chartId) {
+      setSelectedChartId(null);
+    }
+  }, [selectedChartId]);
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -285,49 +329,51 @@ export const ChartWorkspace: React.FC = () => {
             </div>
           </div>
         ) : (
-          // Charts grid
-          <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {charts.map(chart => (
-                <div
-                  key={chart.id}
-                  className={`bg-white rounded-xl shadow-lg border-2 transition-all cursor-pointer hover:shadow-xl ${
-                    selectedChartId === chart.id 
-                      ? 'border-teal-500' 
-                      : 'border-gray-200 hover:border-teal-300'
-                  }`}
-                  onClick={() => handleChartClick(chart.id)}
-                >
-                  <div className="p-4">
-                    <div className="mb-2 flex justify-between items-center">
-                      <h3 className="font-semibold text-gray-900">{chart.config.title}</h3>
-                      <span className="text-xs text-gray-500">
-                        {chart.data.length} rows
-                      </span>
-                    </div>
-                    <div className="h-64">
-                      <ChartPreview config={chart.config} />
-                    </div>
+          // Vertical chart stack
+          <div className="p-6 flex flex-col items-center gap-6 overflow-y-auto">
+            {charts.map((chart) => (
+              <div
+                key={chart.id}
+                className={`bg-white rounded-xl shadow-lg border-2 transition-all cursor-pointer hover:shadow-xl ${
+                  selectedChartId === chart.id 
+                    ? 'border-teal-500' 
+                    : 'border-gray-200 hover:border-teal-300'
+                }`}
+                style={{
+                  width: `${chart.size.width}px`,
+                  height: `${chart.size.height}px`
+                }}
+                onClick={() => handleChartClick(chart.id)}
+              >
+                <div className="p-4 h-full">
+                  <div className="h-full">
+                    <ChartPreview 
+                      config={chart.config} 
+                      onOpenDataEditor={() => toggleDataEditor(chart.id)}
+                      onDelete={() => deleteChart(chart.id)}
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
 
-      {/* Floating Data Editor */}
-      {selectedChart && (
-        <FloatingDataEditor
-          isOpen={showDataEditor}
-          data={selectedChart.data}
-          chartTitle={selectedChart.config.title}
-          onClose={() => {
-            setShowDataEditor(false);
-            setEditingChartId(null);
-          }}
-          onChange={(newData) => handleDataChange(selectedChart.id, newData)}
-        />
+      {/* Floating Data Editors - One for each chart */}
+      {charts.map(chart => 
+        chart.showDataEditor ? (
+          <FloatingDataEditor
+            key={`editor-${chart.id}`}
+            isOpen={true}
+            data={chart.data}
+            chartTitle={chart.config.title}
+            chartConfig={chart.config}
+            onClose={() => closeDataEditor(chart.id)}
+            onChange={(newData) => handleDataChange(chart.id, newData)}
+            onConfigChange={(newConfig) => handleConfigChange(chart.id, newConfig)}
+          />
+        ) : null
       )}
     </div>
   );
