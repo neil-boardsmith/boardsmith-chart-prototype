@@ -94,12 +94,12 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
 
   const commitCellEdit = () => {
     if (editingCell) {
-      const newData = [...data];
+      const newData: (ChartData | EditableChartData)[] = [...data];
       const { row, col } = editingCell;
       
       // If editing beyond existing data, extend the array with empty objects
       while (newData.length <= row) {
-        const emptyRow: ChartData = { category: `Item ${newData.length + 1}` } as ChartData;
+        const emptyRow: EditableChartData = { category: `Item ${newData.length + 1}` };
         existingColumns.forEach(column => {
           emptyRow[column] = column === 'category' ? `Item ${newData.length + 1}` : '';
         });
@@ -115,7 +115,8 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
       const numValue = parseFloat(editValue);
       newData[row][col] = isNaN(numValue) || editValue === '' ? editValue : numValue;
       
-      onChange(newData);
+      // Convert all to ChartData before passing to onChange
+      onChange(newData.map(item => toChartData(item as EditableChartData)));
       setEditingCell(null);
       setEditValue('');
     }
@@ -177,7 +178,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     existingColumns.forEach(col => {
       newRow[col] = col === 'category' ? `Item ${data.length + 1}` : 0;
     });
-    onChange([...data, newRow]);
+    onChange([...data, toChartData(newRow)]);
   };
 
   const deleteRow = (index: number) => {
