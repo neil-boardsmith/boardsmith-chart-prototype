@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Plus, Trash2, Upload, Download, Grid3x3, Clipboard, RotateCcw, ArrowRightLeft, ArrowUpDown } from 'lucide-react';
 import { CSVImporter } from '../data-management/CSVImporter';
 
@@ -45,19 +45,19 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   const displayData = [...data, ...emptyRows];
 
   // Detect current data orientation
-  const detectOrientation = () => {
+  const detectOrientation = useCallback(() => {
     if (data.length === 0) return 'categories-vertical';
     const firstColumn = columns[0];
     // If first column is 'category' or contains category-like data, it's vertical
     return firstColumn?.toLowerCase().includes('category') || firstColumn?.toLowerCase().includes('label') 
       ? 'categories-vertical' : 'categories-horizontal';
-  };
+  }, [data.length, columns]);
   
   const [orientation, setOrientation] = useState<'categories-vertical' | 'categories-horizontal'>('categories-vertical');
   
   useEffect(() => {
     setOrientation(detectOrientation());
-  }, [data, columns, detectOrientation]);
+  }, [detectOrientation]);
 
   // Focus input when editing
   useEffect(() => {
@@ -245,7 +245,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     const hasMultipleColumns = firstRow.length > 1;
     
     let headers: string[];
-    let dataRows: any[][];
+    let dataRows: (string | number)[][];
     let detectedFormat: string = 'unknown';
     
     // Smart detection of data format

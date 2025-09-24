@@ -9,11 +9,11 @@ import { ChartConfig } from '@/types/chart-types';
 
 interface FloatingDataEditorProps {
   isOpen: boolean;
-  data: any[];
+  data: Record<string, any>[];
   chartTitle: string;
   chartConfig: ChartConfig;
   onClose: () => void;
-  onChange: (data: any[]) => void;
+  onChange: (data: Record<string, any>[]) => void;
   onConfigChange: (config: ChartConfig) => void;
 }
 

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useCallback } from 'react';
-import { Upload, X, FileText, AlertCircle } from 'lucide-react';
+import { Upload, X, AlertCircle } from 'lucide-react';
 import Papa from 'papaparse';
 
 interface CSVImporterProps {
-  onImport: (data: any[]) => void;
+  onImport: (data: Record<string, any>[]) => void;
   onClose: () => void;
 }
 
@@ -13,7 +13,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
   const [dragActive, setDragActive] = useState(false);
   const [parsing, setParsing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<any[] | null>(null);
+  const [preview, setPreview] = useState<Record<string, any>[] | null>(null);
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -51,7 +51,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
     setError(null);
 
     Papa.parse(file, {
-      complete: (result) => {
+      complete: (result: Papa.ParseResult<string[]>) => {
         setParsing(false);
         
         if (result.errors.length > 0) {
@@ -67,7 +67,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
           const formattedData = rows
             .filter(row => row.some(cell => cell !== '')) // Filter out empty rows
             .map(row => {
-              const obj: any = {};
+              const obj: Record<string, any> = {};
               headers.forEach((header, index) => {
                 const value = row[index];
                 // Try to parse numbers
@@ -102,7 +102,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
             const formattedData = rows
               .filter(row => row.some(cell => cell !== ''))
               .map(row => {
-                const obj: any = {};
+                const obj: Record<string, any> = {};
                 headers.forEach((header, index) => {
                   const value = row[index];
                   const numValue = parseFloat(value);
