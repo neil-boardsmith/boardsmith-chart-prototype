@@ -5,8 +5,8 @@ import { Plus, Trash2, Upload, Download, Grid3x3, Clipboard, RotateCcw, ArrowRig
 import { CSVImporter } from '../data-management/CSVImporter';
 
 interface DataEditorProps {
-  data: any[];
-  onChange: (data: any[]) => void;
+  data: Record<string, any>[];
+  onChange: (data: Record<string, any>[]) => void;
   isExpanded?: boolean;
 }
 
@@ -57,7 +57,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   
   useEffect(() => {
     setOrientation(detectOrientation());
-  }, [data, columns]);
+  }, [data, columns, detectOrientation]);
 
   // Focus input when editing
   useEffect(() => {
@@ -85,7 +85,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
       
       // If editing beyond existing data, extend the array with empty objects
       while (newData.length <= row) {
-        const emptyRow: any = {};
+        const emptyRow: Record<string, any> = {};
         existingColumns.forEach(column => {
           emptyRow[column] = column === 'category' ? `Item ${newData.length + 1}` : '';
         });
@@ -159,7 +159,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   };
 
   const addRow = () => {
-    const newRow: any = {};
+    const newRow: Record<string, any> = {};
     existingColumns.forEach(col => {
       newRow[col] = col === 'category' ? `Item ${data.length + 1}` : 0;
     });
@@ -191,7 +191,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     onChange(newData);
   };
 
-  const handleImport = (importedData: any[]) => {
+  const handleImport = (importedData: Record<string, any>[]) => {
     onChange(importedData);
     setShowImporter(false);
   };
@@ -281,7 +281,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     
     // Convert to object format
     const result = dataRows.map(row => {
-      const obj: any = {};
+      const obj: Record<string, any> = {};
       headers.forEach((header, i) => {
         obj[header] = i < row.length ? row[i] : '';
       });
@@ -338,14 +338,14 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     if (data.length === 0) return;
     
     const currentColumns = columns;
-    const newData: any[] = [];
+    const newData: Record<string, any>[] = [];
     
     // Get the category values from the first column
     const categoryValues = data.map(row => row[currentColumns[0]]);
     
     // Create new rows for each original column (except the first one which was categories)
     currentColumns.slice(1).forEach((colName) => {
-      const newRow: any = {};
+      const newRow: Record<string, any> = {};
       newRow['category'] = colName; // The old column name becomes the new category
       
       // Fill in the data values
@@ -434,7 +434,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
           )}
         </div>
         <span className="text-gray-400">•</span>
-        <span>Use "Flip" to switch orientation</span>
+        <span>Use &quot;Flip&quot; to switch orientation</span>
       </div>
 
       {/* Excel-like Grid */}
@@ -475,7 +475,6 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
                       type="text"
                       value={col}
                       onChange={(e) => {
-                        const newColumns = [...columns];
                         const oldCol = columns[index];
                         const newCol = e.target.value;
                         

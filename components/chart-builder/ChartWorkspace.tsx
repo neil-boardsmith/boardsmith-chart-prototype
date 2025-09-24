@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface ChartInstance {
   id: string;
   config: ChartConfig;
-  data: any[];
+  data: Record<string, any>[];
   position: { x: number; y: number };
   size: { width: number; height: number };
   showDataEditor?: boolean;
@@ -37,7 +37,7 @@ export const ChartWorkspace: React.FC = () => {
     setDropdownOpen(false);
     
     // Generate sample data based on chart type - SIMPLE AND CLEAR
-    let sampleData: any[] = [];
+    let sampleData: Record<string, any>[] = [];
     
     if (chartId === 'stacked' || chartId === 'stacked100') {
       // Stacked charts need multiple series
@@ -212,7 +212,7 @@ export const ChartWorkspace: React.FC = () => {
     setSelectedChartId(id);
   }, [charts]);
 
-  const handleDataChange = useCallback((chartId: string, newData: any[]) => {
+  const handleDataChange = useCallback((chartId: string, newData: Record<string, any>[]) => {
     setCharts(prevCharts => 
       prevCharts.map(chart => 
         chart.id === chartId 
@@ -323,7 +323,7 @@ export const ChartWorkspace: React.FC = () => {
                 Start Creating Charts
               </h2>
               <p className="text-gray-600 max-w-md">
-                Click "Add Chart" above to insert your first chart. Choose from various chart types 
+                Click &quot;Add Chart&quot; above to insert your first chart. Choose from various chart types 
                 and customize the orientation using interactive controls.
               </p>
             </div>
