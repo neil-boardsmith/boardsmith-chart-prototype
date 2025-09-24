@@ -61,7 +61,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ config, onOpenDataEd
       <div className="bg-white rounded-lg w-full h-full overflow-hidden">
         <Chart
           options={chartOptions as any} // eslint-disable-line @typescript-eslint/no-explicit-any
-          series={chartOptions.series || []}
+          series={chartOptions.series as any || []} // eslint-disable-line @typescript-eslint/no-explicit-any
           type={apexChartType}
           height="100%"
           width="100%"
