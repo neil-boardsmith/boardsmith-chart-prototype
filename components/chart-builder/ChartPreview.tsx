@@ -58,7 +58,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ config, onOpenDataEd
         <Chart
           options={chartOptions}
           series={chartOptions.series || []}
-          type={chartType as any}
+          type={chartType}
           height="100%"
           width="100%"
         />

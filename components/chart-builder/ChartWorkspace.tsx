@@ -164,8 +164,8 @@ export const ChartWorkspace: React.FC = () => {
       config: {
         id,
         title: `${chartName} - ${actualOrientation.charAt(0).toUpperCase() + actualOrientation.slice(1)}`,
-        type: chartType as any,
-        subtype: subtype as any,
+        type: chartType as ChartConfig['type'],
+        subtype: subtype as ChartConfig['subtype'],
         data: sampleData,
         colors: professionalThemes['boardsmith-professional'].colors,
         theme: 'boardsmith-professional',

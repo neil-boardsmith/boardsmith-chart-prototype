@@ -16,7 +16,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   const [editValue, setEditValue] = useState('');
   const [showImporter, setShowImporter] = useState(false);
   const [showPasteHelper, setShowPasteHelper] = useState(false);
-  const [pastePreview, setPastePreview] = useState<{
+  interface PastePreview {
     data: Record<string, any>[];
     preview: {
       detectedFormat: string;
@@ -25,7 +25,8 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
       totalRows: number;
       totalColumns: number;
     } | null;
-  } | null>(null);
+  }
+  const [pastePreview, setPastePreview] = useState<PastePreview | null>(null);
   const [pasteText, setPasteText] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -210,16 +211,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     URL.revokeObjectURL(url);
   };
 
-  const parsePastedData = (text: string): { 
-    data: Record<string, any>[]; 
-    preview: {
-      detectedFormat: string;
-      headers: string[];
-      sampleData: Record<string, any>[];
-      totalRows: number;
-      totalColumns: number;
-    } | null;
-  } => {
+  const parsePastedData = (text: string): PastePreview => {
     const lines = text.trim().split('\n');
     if (lines.length === 0) return { data: [], preview: null };
     
@@ -624,7 +616,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
               <div className="flex-1 overflow-hidden flex flex-col">
                 <div className="mb-3 p-3 bg-blue-50 rounded-lg">
                   <p className="text-xs font-medium text-blue-800 mb-1">
-                    Detected Format: {pastePreview.preview?.detectedFormat?.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Unknown'}
+                    Detected Format: {pastePreview.preview?.detectedFormat?.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()) || 'Unknown'}
                   </p>
                   <p className="text-xs text-blue-700">
                     {pastePreview.preview?.totalRows || 0} rows × {pastePreview.preview?.totalColumns || 0} columns
