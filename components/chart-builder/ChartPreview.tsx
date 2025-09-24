@@ -50,6 +50,10 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ config, onOpenDataEd
   const chartType = ['pie', 'doughnut'].includes(config.type) 
     ? (config.type === 'doughnut' ? 'donut' : 'pie')
     : chartOptions.chart?.type || 'bar';
+  
+  // Cast to ApexCharts type
+  type ApexChartType = "bar" | "line" | "area" | "pie" | "scatter" | "rangeBar" | "donut" | "radialBar" | "bubble" | "heatmap" | "candlestick" | "boxPlot" | "radar" | "polarArea" | "rangeArea" | "treemap";
+  const apexChartType = chartType as ApexChartType;
 
   return (
     <div className="relative w-full h-full">
@@ -58,7 +62,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ config, onOpenDataEd
         <Chart
           options={chartOptions}
           series={chartOptions.series || []}
-          type={chartType}
+          type={apexChartType}
           height="100%"
           width="100%"
         />
