@@ -73,7 +73,7 @@ export function getApexConfig(chartConfig: ChartConfig) {
   else if (chartType === 'waterfall') baseChartType = 'bar'; // Will be overridden in switch case
 
   // Base config for all charts
-  const config = {
+  const config: Record<string, any> = { // eslint-disable-line @typescript-eslint/no-explicit-any
     series: series,
     chart: {
       type: baseChartType,
