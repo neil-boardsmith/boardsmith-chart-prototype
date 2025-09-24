@@ -3,9 +3,10 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, X, AlertCircle } from 'lucide-react';
 import Papa from 'papaparse';
+import { ChartData } from '@/types/chart-types';
 
 interface CSVImporterProps {
-  onImport: (data: Record<string, any>[]) => void;
+  onImport: (data: ChartData[]) => void;
   onClose: () => void;
 }
 
@@ -13,7 +14,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
   const [dragActive, setDragActive] = useState(false);
   const [parsing, setParsing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [preview, setPreview] = useState<Record<string, any>[] | null>(null);
+  const [preview, setPreview] = useState<ChartData[] | null>(null);
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -67,7 +68,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
           const formattedData = rows
             .filter(row => row.some(cell => cell !== '')) // Filter out empty rows
             .map(row => {
-              const obj: Record<string, any> = {};
+              const obj: ChartData = { category: '' } as ChartData;
               headers.forEach((header, index) => {
                 const value = row[index];
                 // Try to parse numbers
@@ -102,7 +103,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
             const formattedData = rows
               .filter(row => row.some(cell => cell !== ''))
               .map(row => {
-                const obj: Record<string, any> = {};
+                const obj: ChartData = { category: '' } as ChartData;
                 headers.forEach((header, index) => {
                   const value = row[index];
                   const numValue = parseFloat(value);
@@ -117,7 +118,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
         header: false,
         skipEmptyLines: true
       });
-    } catch (err) {
+    } catch {
       setError('Failed to read clipboard');
     }
   };

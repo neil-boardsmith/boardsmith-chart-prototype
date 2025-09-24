@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { AlignLeft, AlignCenter, AlignRight, Square } from 'lucide-react';
+import { Square } from 'lucide-react';
 
 interface LegendControlsProps {
   showLegend: boolean;
   legendPosition: 'top' | 'bottom' | 'right' | 'left';
-  onChange: (updates: any) => void;
+  onChange: (updates: { showLegend?: boolean; legendPosition?: string }) => void;
 }
 
 export const LegendControls: React.FC<LegendControlsProps> = ({ 

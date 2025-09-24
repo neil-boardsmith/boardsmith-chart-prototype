@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { FloatingDataEditor } from './FloatingDataEditor';
 import { ChartPreview } from './ChartPreview';
-import { ChartConfig } from '@/types/chart-types';
+import { ChartConfig, ChartData } from '@/types/chart-types';
 import { professionalThemes } from '@/constants/themes';
 import { chartTypes } from '@/types/chart';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface ChartInstance {
   id: string;
   config: ChartConfig;
-  data: Record<string, any>[];
+  data: ChartData[];
   position: { x: number; y: number };
   size: { width: number; height: number };
   showDataEditor?: boolean;
@@ -37,7 +37,7 @@ export const ChartWorkspace: React.FC = () => {
     setDropdownOpen(false);
     
     // Generate sample data based on chart type - SIMPLE AND CLEAR
-    let sampleData: Record<string, any>[] = [];
+    let sampleData: ChartData[] = [];
     
     if (chartId === 'stacked' || chartId === 'stacked100') {
       // Stacked charts need multiple series
@@ -212,7 +212,7 @@ export const ChartWorkspace: React.FC = () => {
     setSelectedChartId(id);
   }, [charts]);
 
-  const handleDataChange = useCallback((chartId: string, newData: Record<string, any>[]) => {
+  const handleDataChange = useCallback((chartId: string, newData: ChartData[]) => {
     setCharts(prevCharts => 
       prevCharts.map(chart => 
         chart.id === chartId 

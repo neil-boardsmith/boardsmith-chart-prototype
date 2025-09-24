@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Plus, Trash2, Upload, Download, Grid3x3, Clipboard, RotateCcw, ArrowRightLeft, ArrowUpDown } from 'lucide-react';
 import { CSVImporter } from '../data-management/CSVImporter';
+import { ChartData } from '@/types/chart-types';
 
 interface DataEditorProps {
-  data: Record<string, any>[];
-  onChange: (data: Record<string, any>[]) => void;
+  data: ChartData[];
+  onChange: (data: ChartData[]) => void;
   isExpanded?: boolean;
 }
 
@@ -17,11 +18,11 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   const [showImporter, setShowImporter] = useState(false);
   const [showPasteHelper, setShowPasteHelper] = useState(false);
   interface PastePreview {
-    data: Record<string, any>[];
+    data: ChartData[];
     preview: {
       detectedFormat: string;
       headers: string[];
-      sampleData: Record<string, any>[];
+      sampleData: ChartData[];
       totalRows: number;
       totalColumns: number;
     } | null;
@@ -32,12 +33,14 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   const tableRef = useRef<HTMLDivElement>(null);
 
   // Get column headers - always show extra columns for expansion
-  const existingColumns = data.length > 0 ? Object.keys(data[0]) : ['category', 'value'];
-  const extraColumns = isExpanded ? 5 : 2; // More extra columns in expanded view
-  const emptyColumnNames = Array.from({ length: extraColumns }, (_, i) => 
-    `series${existingColumns.length + i}`
-  ).filter(name => !existingColumns.includes(name));
-  const columns = [...existingColumns, ...emptyColumnNames];
+  const columns = useMemo(() => {
+    const existingColumns = data.length > 0 ? Object.keys(data[0]) : ['category', 'value'];
+    const extraColumns = isExpanded ? 5 : 2; // More extra columns in expanded view
+    const emptyColumnNames = Array.from({ length: extraColumns }, (_, i) => 
+      `series${existingColumns.length + i}`
+    ).filter(name => !existingColumns.includes(name));
+    return [...existingColumns, ...emptyColumnNames];
+  }, [data, isExpanded]);
 
   // Create extra empty rows for expansion
   const extraRows = isExpanded ? 5 : 3; // More extra rows in expanded view
@@ -85,7 +88,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
       
       // If editing beyond existing data, extend the array with empty objects
       while (newData.length <= row) {
-        const emptyRow: Record<string, any> = {};
+        const emptyRow: ChartData = { category: `Item ${newData.length + 1}` } as ChartData;
         existingColumns.forEach(column => {
           emptyRow[column] = column === 'category' ? `Item ${newData.length + 1}` : '';
         });
@@ -159,7 +162,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   };
 
   const addRow = () => {
-    const newRow: Record<string, any> = {};
+    const newRow: ChartData = { category: `Item ${data.length + 1}` } as ChartData;
     existingColumns.forEach(col => {
       newRow[col] = col === 'category' ? `Item ${data.length + 1}` : 0;
     });
@@ -191,7 +194,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     onChange(newData);
   };
 
-  const handleImport = (importedData: Record<string, any>[]) => {
+  const handleImport = (importedData: ChartData[]) => {
     onChange(importedData);
     setShowImporter(false);
   };
@@ -281,7 +284,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     
     // Convert to object format
     const result = dataRows.map(row => {
-      const obj: Record<string, any> = {};
+      const obj: ChartData = { category: '' } as ChartData;
       headers.forEach((header, i) => {
         obj[header] = i < row.length ? row[i] : '';
       });
@@ -338,14 +341,14 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     if (data.length === 0) return;
     
     const currentColumns = columns;
-    const newData: Record<string, any>[] = [];
+    const newData: ChartData[] = [];
     
     // Get the category values from the first column
     const categoryValues = data.map(row => row[currentColumns[0]]);
     
     // Create new rows for each original column (except the first one which was categories)
     currentColumns.slice(1).forEach((colName) => {
-      const newRow: Record<string, any> = {};
+      const newRow: ChartData = { category: `Item ${data.length + 1}` } as ChartData;
       newRow['category'] = colName; // The old column name becomes the new category
       
       // Fill in the data values
@@ -638,7 +641,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
                       </tr>
                     </thead>
                     <tbody>
-                      {pastePreview.preview?.sampleData?.map((row: Record<string, any>, i: number) => (
+                      {pastePreview.preview?.sampleData?.map((row: ChartData, i: number) => (
                         <tr key={i} className="hover:bg-gray-50">
                           {pastePreview.preview?.headers?.map((header: string, j: number) => (
                             <td key={j} className="px-2 py-1 border-b border-r border-gray-200">

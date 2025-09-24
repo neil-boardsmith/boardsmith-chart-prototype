@@ -5,15 +5,15 @@ import { X, Maximize2, Minimize2, Move, Expand } from 'lucide-react';
 import { DataEditor } from './DataEditor';
 import { ChartCustomizer } from './ChartCustomizer';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChartConfig } from '@/types/chart-types';
+import { ChartConfig, ChartData } from '@/types/chart-types';
 
 interface FloatingDataEditorProps {
   isOpen: boolean;
-  data: Record<string, any>[];
+  data: ChartData[];
   chartTitle: string;
   chartConfig: ChartConfig;
   onClose: () => void;
-  onChange: (data: Record<string, any>[]) => void;
+  onChange: (data: ChartData[]) => void;
   onConfigChange: (config: ChartConfig) => void;
 }
 
