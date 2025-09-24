@@ -58,6 +58,12 @@ export interface ChartData {
   [key: string]: string | number;
 }
 
+// Flexible interface for editing - allows partial data
+export interface EditableChartData {
+  category?: string;
+  [key: string]: string | number | undefined;
+}
+
 export interface SeriesConfig {
   name: string;
   color: string;

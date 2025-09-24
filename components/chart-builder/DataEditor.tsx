@@ -3,13 +3,21 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Plus, Trash2, Upload, Download, Grid3x3, Clipboard, RotateCcw, ArrowRightLeft, ArrowUpDown } from 'lucide-react';
 import { CSVImporter } from '../data-management/CSVImporter';
-import { ChartData } from '@/types/chart-types';
+import { ChartData, EditableChartData } from '@/types/chart-types';
 
 interface DataEditorProps {
   data: ChartData[];
   onChange: (data: ChartData[]) => void;
   isExpanded?: boolean;
 }
+
+// Helper function to convert EditableChartData to ChartData with defaults
+const toChartData = (item: EditableChartData): ChartData => ({
+  category: item.category || '',
+  ...Object.fromEntries(
+    Object.entries(item).filter(([key]) => key !== 'category')
+  )
+});
 
 export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpanded = false }) => {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: string } | null>(null);
@@ -47,8 +55,8 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
 
   // Create extra empty rows for expansion
   const extraRows = isExpanded ? 5 : 3; // More extra rows in expanded view
-  const emptyRows: ChartData[] = Array.from({ length: extraRows }, () => ({ category: '' } as ChartData));
-  const displayData = [...data, ...emptyRows];
+  const emptyRows: EditableChartData[] = Array.from({ length: extraRows }, () => ({}));
+  const displayData: (ChartData | EditableChartData)[] = [...data, ...emptyRows];
 
   // Detect current data orientation
   const detectOrientation = useCallback(() => {
@@ -100,7 +108,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
       
       // Ensure the row object exists
       if (!newData[row]) {
-        newData[row] = {};
+        newData[row] = {} as EditableChartData;
       }
       
       // Try to parse as number if it looks like one
@@ -165,7 +173,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   };
 
   const addRow = () => {
-    const newRow: ChartData = { category: `Item ${data.length + 1}` } as ChartData;
+    const newRow: EditableChartData = { category: `Item ${data.length + 1}` };
     existingColumns.forEach(col => {
       newRow[col] = col === 'category' ? `Item ${data.length + 1}` : 0;
     });
@@ -287,7 +295,7 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     
     // Convert to object format
     const result = dataRows.map(row => {
-      const obj: ChartData = { category: '' } as ChartData;
+      const obj: EditableChartData = {};
       headers.forEach((header, i) => {
         obj[header] = i < row.length ? row[i] : '';
       });
@@ -344,14 +352,14 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
     if (data.length === 0) return;
     
     const currentColumns = columns;
-    const newData: ChartData[] = [];
+    const newData: EditableChartData[] = [];
     
     // Get the category values from the first column
     const categoryValues = data.map(row => row[currentColumns[0]]);
     
     // Create new rows for each original column (except the first one which was categories)
     currentColumns.slice(1).forEach((colName) => {
-      const newRow: ChartData = { category: `Item ${data.length + 1}` } as ChartData;
+      const newRow: EditableChartData = { category: `Item ${data.length + 1}` };
       newRow['category'] = colName; // The old column name becomes the new category
       
       // Fill in the data values
