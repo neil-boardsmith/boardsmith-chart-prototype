@@ -33,14 +33,17 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
   const tableRef = useRef<HTMLDivElement>(null);
 
   // Get column headers - always show extra columns for expansion
+  const existingColumns = useMemo(() => {
+    return data.length > 0 ? Object.keys(data[0]) : ['category', 'value'];
+  }, [data]);
+  
   const columns = useMemo(() => {
-    const existingColumns = data.length > 0 ? Object.keys(data[0]) : ['category', 'value'];
     const extraColumns = isExpanded ? 5 : 2; // More extra columns in expanded view
     const emptyColumnNames = Array.from({ length: extraColumns }, (_, i) => 
       `series${existingColumns.length + i}`
     ).filter(name => !existingColumns.includes(name));
     return [...existingColumns, ...emptyColumnNames];
-  }, [data, isExpanded]);
+  }, [existingColumns, isExpanded]);
 
   // Create extra empty rows for expansion
   const extraRows = isExpanded ? 5 : 3; // More extra rows in expanded view
