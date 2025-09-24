@@ -303,16 +303,19 @@ export const DataEditor: React.FC<DataEditorProps> = ({ data, onChange, isExpand
       return obj;
     });
     
+    // Convert to ChartData for return
+    const chartData = result.map(toChartData);
+    
     // Create preview info
     const preview = {
       detectedFormat,
       headers,
-      sampleData: result.slice(0, 3),
-      totalRows: result.length,
+      sampleData: chartData.slice(0, 3),
+      totalRows: chartData.length,
       totalColumns: headers.length
     };
     
-    return { data: result, preview };
+    return { data: chartData, preview };
   };
 
   const handlePaste = async () => {
