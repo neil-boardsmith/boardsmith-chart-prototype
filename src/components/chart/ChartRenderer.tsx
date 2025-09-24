@@ -25,7 +25,7 @@ interface ChartRendererProps {
   advancedStyles?: AdvancedStyles;
 }
 
-export const ChartRenderer = React.forwardRef<any, ChartRendererProps>(({
+export const ChartRenderer = React.forwardRef<HTMLDivElement, ChartRendererProps>(({
   type,
   data,
   title,
@@ -36,7 +36,7 @@ export const ChartRenderer = React.forwardRef<any, ChartRendererProps>(({
   yColumns,
   advancedStyles,
 }, ref) => {
-  const chartRef = useRef<any>(null);
+  const chartRef = useRef<HTMLDivElement>(null);
   const config = useMemo(() => ({
     id: 'chart',
     type,

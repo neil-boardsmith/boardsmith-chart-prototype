@@ -36,7 +36,7 @@ export function getApexConfig(chartConfig: ChartConfig) {
   );
   
   // Generate series based on chart type
-  let series: Array<{name: string; data: any[]; type?: string}> = [];
+  let series: Array<{name: string; data: (string | number)[]; type?: string}> = [];
   const chartType = chartConfig.type; // Use the main chart type, not subtype
   
   // Different chart types need different series structures
@@ -73,7 +73,7 @@ export function getApexConfig(chartConfig: ChartConfig) {
   else if (chartType === 'waterfall') baseChartType = 'bar'; // Will be overridden in switch case
 
   // Base config for all charts
-  const config: Record<string, any> = {
+  const config = {
     series: series,
     chart: {
       type: baseChartType,
@@ -322,7 +322,7 @@ export function getApexConfig(chartConfig: ChartConfig) {
       // Enhanced data labels for waterfall
       config.dataLabels = {
         enabled: chartConfig.showDataLabels,
-        formatter: function(value: number[], opts: any) {
+        formatter: function(value: number[], opts: { dataPointIndex?: number } = {}) {
           if (opts && typeof opts.dataPointIndex === 'number' && waterfallData[opts.dataPointIndex]) {
             const dataPoint = waterfallData[opts.dataPointIndex];
             if (dataPoint && typeof dataPoint.originalChange === 'number') {
@@ -346,7 +346,7 @@ export function getApexConfig(chartConfig: ChartConfig) {
       // Custom tooltip for waterfall
       config.tooltip = {
         y: {
-          formatter: function(value: number[], opts: any) {
+          formatter: function(value: number[], opts: { dataPointIndex?: number } = {}) {
             if (opts && typeof opts.dataPointIndex === 'number' && waterfallData[opts.dataPointIndex]) {
               const dataPoint = waterfallData[opts.dataPointIndex];
               if (dataPoint && typeof dataPoint.originalChange === 'number') {

@@ -236,7 +236,7 @@ export const getChartOptions = (config: ChartConfig, advancedStyles?: AdvancedSt
         },
         dataLabels: {
           enabled: true,
-          formatter: function(val: number, opts: any) {
+          formatter: function(val: number, opts: { seriesIndex: number; dataPointIndex: number }) {
             const seriesIndex = opts.seriesIndex;
             const dataIndex = opts.dataPointIndex;
             if (seriesIndex === 0) return ''; // Hidden base series
@@ -256,7 +256,7 @@ export const getChartOptions = (config: ChartConfig, advancedStyles?: AdvancedSt
         },
         tooltip: {
           shared: false,
-          custom: function({ seriesIndex, dataPointIndex, w }: any) {
+          custom: function({ seriesIndex, dataPointIndex, w }: { seriesIndex: number; dataPointIndex: number; w: { config: { xaxis: { categories: string[] }; series: Array<{ data: number[] }> } } }) {
             if (seriesIndex === 0) return '';
             
             const category = w.config.xaxis.categories[dataPointIndex];

@@ -228,7 +228,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
                     <tbody>
                       {preview.map((row, index) => (
                         <tr key={index} className="hover:bg-gray-50">
-                          {Object.values(row).map((value: any, i) => (
+                          {Object.values(row).map((value: string | number, i) => (
                             <td key={i} className="px-3 py-2 text-gray-900 border-b border-gray-100">
                               {value}
                             </td>

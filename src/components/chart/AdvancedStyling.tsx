@@ -47,7 +47,7 @@ const defaultStyles: AdvancedStyles = {
 };
 
 export function AdvancedStyling({ chartType, styles, onStylesChange }: AdvancedStylingProps) {
-  const updateStyle = (key: keyof AdvancedStyles, value: any) => {
+  const updateStyle = (key: keyof AdvancedStyles, value: string | number | boolean) => {
     onStylesChange({ ...styles, [key]: value });
   };
 
