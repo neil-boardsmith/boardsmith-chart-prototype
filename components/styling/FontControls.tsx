@@ -6,7 +6,7 @@ import { Type } from 'lucide-react';
 interface FontControlsProps {
   fontFamily: string;
   title: string;
-  onChange: (updates: { fontFamily?: string }) => void;
+  onChange: (updates: { fontFamily?: string; title?: string }) => void;
 }
 
 const fontOptions = [
