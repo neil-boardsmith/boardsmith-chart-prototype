@@ -60,7 +60,7 @@ export const ChartPreview: React.FC<ChartPreviewProps> = ({ config, onOpenDataEd
       {/* Chart Container */}
       <div className="bg-white rounded-lg w-full h-full overflow-hidden">
         <Chart
-          options={chartOptions}
+          options={chartOptions as any}
           series={chartOptions.series || []}
           type={apexChartType}
           height="100%"
