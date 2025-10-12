@@ -2,12 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { Plus, Download, Grid, Settings } from 'lucide-react';
-import { ChartSelector } from '@/components/ChartSelector';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { ChartDropdown } from './ChartDropdown';
 import { FloatingDataEditor } from './FloatingDataEditor';
 import { ChartPreview } from './ChartPreview';
 import { ChartConfig, ChartData } from '@/types/chart-types';
@@ -27,14 +22,12 @@ interface ChartInstance {
 export const ChartWorkspace: React.FC = () => {
   const [charts, setCharts] = useState<ChartInstance[]>([]);
   const [selectedChartId, setSelectedChartId] = useState<string | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleAddChart = useCallback((
     chartId: string, 
     orientation?: string
   ) => {
     const id = uuidv4();
-    setDropdownOpen(false);
     
     // Generate sample data based on chart type - SIMPLE AND CLEAR
     let sampleData: ChartData[] = [];
@@ -280,17 +273,7 @@ export const ChartWorkspace: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <h1 className="text-xl font-bold text-gray-900">Chart Builder</h1>
-              <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors">
-                    <Plus className="w-4 h-4" />
-                    Add Chart
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[650px] p-4">
-                  <ChartSelector onSelect={handleAddChart} />
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <ChartDropdown onSelect={handleAddChart} />
             </div>
             
             <div className="flex items-center gap-2">
@@ -324,7 +307,7 @@ export const ChartWorkspace: React.FC = () => {
               </h2>
               <p className="text-gray-600 max-w-md">
                 Click &quot;Add Chart&quot; above to insert your first chart. Choose from various chart types 
-                and customize the orientation using interactive controls.
+                and select vertical or horizontal orientation where available.
               </p>
             </div>
           </div>
@@ -334,11 +317,7 @@ export const ChartWorkspace: React.FC = () => {
             {charts.map((chart) => (
               <div
                 key={chart.id}
-                className={`bg-white rounded-xl shadow-lg border-2 transition-all cursor-pointer hover:shadow-xl ${
-                  selectedChartId === chart.id 
-                    ? 'border-teal-500' 
-                    : 'border-gray-200 hover:border-teal-300'
-                }`}
+                className="bg-white rounded-xl shadow-lg transition-all cursor-pointer hover:shadow-xl"
                 style={{
                   width: `${chart.size.width}px`,
                   height: `${chart.size.height}px`
