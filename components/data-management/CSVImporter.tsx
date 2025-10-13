@@ -15,6 +15,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
   const [parsing, setParsing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<ChartData[] | null>(null);
+  const [fullData, setFullData] = useState<ChartData[] | null>(null);
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -84,6 +85,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
               return obj;
             });
 
+          setFullData(formattedData); // Store full dataset
           setPreview(formattedData.slice(0, 5)); // Show first 5 rows as preview
         }
       },
@@ -124,6 +126,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
                 return obj;
               });
 
+            setFullData(formattedData); // Store full dataset
             setPreview(formattedData.slice(0, 5));
           }
         },
@@ -136,8 +139,8 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
   };
 
   const confirmImport = () => {
-    if (preview) {
-      onImport(preview);
+    if (fullData) {
+      onImport(fullData);
     }
   };
 
@@ -251,7 +254,7 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
                   </table>
                 </div>
                 <p className="mt-2 text-xs text-gray-500">
-                  Showing first {preview.length} rows
+                  Showing first {preview.length} rows of {fullData?.length || preview.length} total rows
                 </p>
               </div>
 
