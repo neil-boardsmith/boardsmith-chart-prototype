@@ -73,7 +73,13 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
                 const value = row[index];
                 // Try to parse numbers
                 const numValue = parseFloat(value);
-                obj[header] = isNaN(numValue) ? value : numValue;
+                
+                // First column should always be the category
+                if (index === 0) {
+                  obj.category = value;
+                } else {
+                  obj[header] = isNaN(numValue) ? value : numValue;
+                }
               });
               return obj;
             });
@@ -107,7 +113,13 @@ export const CSVImporter: React.FC<CSVImporterProps> = ({ onImport, onClose }) =
                 headers.forEach((header, index) => {
                   const value = row[index];
                   const numValue = parseFloat(value);
-                  obj[header] = isNaN(numValue) ? value : numValue;
+                  
+                  // First column should always be the category
+                  if (index === 0) {
+                    obj.category = value;
+                  } else {
+                    obj[header] = isNaN(numValue) ? value : numValue;
+                  }
                 });
                 return obj;
               });
